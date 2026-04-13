@@ -1,73 +1,131 @@
 "use client";
-import { useState } from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+
+import { useState, useEffect } from "react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 const navLinks = [
-  { name: "Products", href: "#", dropdown: true },
-  { name: "For Teams", href: "/headshots-for-teams" },
-  { name: "Reviews", href: "/reviews" },
-  { name: "Pricing", href: "/pricing" },
-  { name: "Resources", href: "#", dropdown: true },
-  { name: "Privacy", href: "/privacy-page" },
+  { name: "How It Works", href: "#how-it-works" },
+  { name: "Pricing", href: "#pricing" },
+  { name: "Reviews", href: "#reviews" },
 ];
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <header className="sticky top-4 z-[999] mx-auto w-[96%] rounded-xl border bg-white shadow-md md:w-[98%] xl:w-[90%]">
-      <div className="flex h-[60px] items-center justify-between px-4">
-        <Link href="/" className="flex items-center gap-1">
-          <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-orange-600 to-orange-300"></div>
-          <span className="text-xl font-bold">Aragon.ai</span>
+    <header
+      className={cn(
+        "fixed left-0 right-0 top-0 z-50 transition-all duration-300",
+        scrolled
+          ? "border-b border-border/50 bg-background/80 backdrop-blur-xl"
+          : "bg-transparent"
+      )}
+    >
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 lg:px-8">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-primary">
+            <span className="text-sm font-bold text-white">AI</span>
+          </div>
+          <span className="text-lg font-semibold tracking-tight text-foreground">
+            Headshot Pro
+          </span>
         </Link>
 
-        <nav className="hidden lg:block">
-          <ul className="flex space-x-4">
+        {/* Desktop Navigation */}
+        <nav className="hidden md:block">
+          <ul className="flex items-center gap-1">
             {navLinks.map((item) => (
               <li key={item.name}>
-                {item.dropdown ? (
-                  <button className="flex items-center gap-1 rounded-md p-2 text-sm font-semibold">
-                    {item.name} <ChevronDown className="h-3 w-3" />
-                  </button>
-                ) : (
-                  <Link href={item.href} className="rounded-md p-2 text-sm font-semibold hover:bg-gray-100">
-                    {item.name}
-                  </Link>
-                )}
+                <Link
+                  href={item.href}
+                  className="rounded-lg px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  {item.name}
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
 
-        <div className="hidden items-center gap-4 sm:flex">
-          <Link href="/login" className="font-bold hover:opacity-80">Log in</Link>
-          <Button asChild className="bg-orange-600 text-white hover:bg-orange-700">
-            <Link href="/login?template=avatar_professional">Create your headshots now</Link>
+        {/* Desktop Actions */}
+        <div className="hidden items-center gap-3 md:flex">
+          <Link
+            href="/login"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          >
+            Log in
+          </Link>
+          <Button
+            asChild
+            className="gradient-primary hover:gradient-primary-hover text-white shadow-none transition-all hover:glow-primary"
+          >
+            <Link href="/get-started">Get Started</Link>
           </Button>
         </div>
 
-        <button onClick={() => setMobileOpen(!mobileOpen)} className="lg:hidden">
-          {mobileOpen ? <X /> : <Menu />}
+        {/* Mobile Menu Button */}
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-foreground transition-colors hover:bg-muted md:hidden"
+          aria-label="Toggle menu"
+        >
+          {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
-      {mobileOpen && (
-        <div className="border-t p-4 lg:hidden">
-          <ul className="flex flex-col space-y-3">
+      {/* Mobile Menu */}
+      <div
+        className={cn(
+          "absolute left-0 right-0 top-16 border-b border-border bg-background/95 backdrop-blur-xl transition-all duration-300 md:hidden",
+          mobileOpen
+            ? "pointer-events-auto opacity-100"
+            : "pointer-events-none opacity-0"
+        )}
+      >
+        <div className="mx-auto max-w-6xl px-6 py-6">
+          <ul className="flex flex-col gap-1">
             {navLinks.map((item) => (
               <li key={item.name}>
-                <Link href={item.href} className="block py-2 text-base font-semibold">
+                <Link
+                  href={item.href}
+                  className="block rounded-lg px-4 py-3 text-base font-medium text-foreground transition-colors hover:bg-muted"
+                  onClick={() => setMobileOpen(false)}
+                >
                   {item.name}
                 </Link>
               </li>
             ))}
-            <li><Link href="/login" className="block py-2 font-semibold">Log in</Link></li>
-            <li><Button className="w-full bg-orange-600 text-white">Create your headshots now</Button></li>
           </ul>
+          <div className="mt-6 flex flex-col gap-3 border-t border-border pt-6">
+            <Link
+              href="/login"
+              className="block rounded-lg px-4 py-3 text-center text-base font-medium text-foreground transition-colors hover:bg-muted"
+            >
+              Log in
+            </Link>
+            <Button
+              asChild
+              size="lg"
+              className="gradient-primary text-white"
+            >
+              <Link href="/get-started">Get Started</Link>
+            </Button>
+          </div>
         </div>
-      )}
+      </div>
     </header>
   );
 }
