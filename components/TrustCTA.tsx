@@ -27,8 +27,8 @@ export default function TrustCTA() {
         <div className="grid gap-8 md:grid-cols-3">
           {trustFeatures.map((feature) => (
             <div key={feature.title} className="text-center">
-              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-                <feature.icon className="h-6 w-6 text-primary" />
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-accent/10">
+                <feature.icon className="h-6 w-6 text-accent" />
               </div>
               <h3 className="mt-4 text-lg font-semibold text-foreground">
                 {feature.title}
@@ -51,7 +51,7 @@ export default function TrustCTA() {
           <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
             <Button
               size="lg"
-              className="gradient-primary text-white px-8 h-12 text-base font-medium transition-all hover:glow-primary"
+              className="bg-accent text-accent-foreground px-8 h-12 text-base font-medium transition-all hover:bg-accent/90 hover:glow-primary"
             >
               Create Your Headshot
               <ArrowRight className="ml-2 h-4 w-4" />

@@ -47,11 +47,11 @@ export default function HowItWorks() {
               <div className="relative flex flex-col items-center text-center">
                 {/* Icon Container */}
                 <div className="relative z-10 flex h-24 w-24 items-center justify-center rounded-2xl border border-border bg-card shadow-sm">
-                  <step.icon className="h-10 w-10 text-primary" />
+                  <step.icon className="h-10 w-10 text-accent" />
                 </div>
 
                 {/* Step Number */}
-                <div className="mt-6 flex h-8 w-8 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+                <div className="mt-6 flex h-8 w-8 items-center justify-center rounded-full bg-accent text-sm font-semibold text-accent-foreground">
                   {step.number}
                 </div>
 

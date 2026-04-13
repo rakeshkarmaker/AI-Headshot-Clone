@@ -71,11 +71,11 @@ export default function Testimonials() {
           {testimonials.map((testimonial) => (
             <div
               key={testimonial.id}
-              className="relative rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-primary/30 hover:shadow-lg"
+              className="relative rounded-2xl border border-border bg-card p-6 transition-all duration-300 hover:border-accent/30 hover:shadow-lg"
             >
               {/* Quote Icon */}
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                <Quote className="h-5 w-5 text-primary" />
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-accent/10">
+                <Quote className="h-5 w-5 text-accent" />
               </div>
 
               {/* Quote Text */}

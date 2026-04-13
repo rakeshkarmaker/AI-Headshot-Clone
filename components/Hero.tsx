@@ -24,11 +24,11 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-background pt-24 pb-20">
+    <section className="relative min-h-screen overflow-hidden bg-background pt-28 pb-20 lg:pt-32">
       {/* Subtle Background Gradient */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-accent/5 blur-3xl" />
+        <div className="absolute -right-40 -top-40 h-[600px] w-[600px] rounded-full bg-accent/5 blur-3xl" />
+        <div className="absolute -bottom-40 -left-40 h-[500px] w-[500px] rounded-full bg-accent/3 blur-3xl" />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
@@ -36,8 +36,8 @@ export default function Hero() {
           {/* Left Column - Text Content */}
           <div className="text-center lg:text-left">
             {/* Subtle Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary/50 px-4 py-1.5 text-sm font-medium text-muted-foreground">
-              <span className="flex h-2 w-2 rounded-full bg-accent" />
+            <div className="inline-flex items-center gap-2 rounded-full border border-accent/20 bg-accent/5 px-4 py-1.5 text-sm font-medium text-accent">
+              <span className="flex h-2 w-2 rounded-full bg-accent animate-pulse" />
               Trusted by professionals worldwide
             </div>
 
@@ -57,15 +57,15 @@ export default function Hero() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
               <Button
                 size="lg"
-                className="gradient-primary text-white px-8 h-12 text-base font-medium transition-all hover:glow-primary"
+                className="bg-accent text-accent-foreground px-8 h-12 text-base font-medium transition-all hover:bg-accent/90 hover:glow-primary"
               >
                 Create Your Headshot
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
               <Button
-                variant="ghost"
+                variant="outline"
                 size="lg"
-                className="text-muted-foreground h-12"
+                className="h-12 border-border text-foreground hover:bg-muted"
               >
                 View Examples
               </Button>
@@ -138,8 +138,8 @@ export default function Hero() {
 
               {/* Upload Area */}
               <div className="text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-                  <Upload className="h-6 w-6 text-primary" />
+                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent/10">
+                  <Upload className="h-6 w-6 text-accent" />
                 </div>
                 <h3 className="mt-4 text-lg font-semibold text-foreground">
                   Upload Your Photo
@@ -150,7 +150,7 @@ export default function Hero() {
 
                 <Button
                   size="lg"
-                  className="mt-6 w-full gradient-primary text-white font-medium"
+                  className="mt-6 w-full bg-accent text-accent-foreground font-medium hover:bg-accent/90"
                 >
                   <Upload className="mr-2 h-4 w-4" />
                   Select Photo
@@ -179,7 +179,7 @@ export default function Hero() {
             <div className="absolute -right-4 bottom-20 hidden lg:block">
               <div className="rounded-xl border border-border bg-card px-4 py-3 shadow-lg">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-full gradient-primary" />
+                  <div className="h-10 w-10 rounded-full bg-accent" />
                   <div>
                     <p className="text-xs text-muted-foreground">After</p>
                     <p className="text-sm font-medium text-foreground">Professional</p>

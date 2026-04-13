@@ -67,14 +67,14 @@ export default function Pricing() {
               className={cn(
                 "relative rounded-2xl border p-8 transition-all duration-300",
                 plan.featured
-                  ? "border-primary bg-card shadow-lg ring-1 ring-primary"
-                  : "border-border bg-card hover:border-primary/30 hover:shadow-lg"
+                  ? "border-accent bg-card shadow-lg ring-1 ring-accent"
+                  : "border-border bg-card hover:border-accent/30 hover:shadow-lg"
               )}
             >
               {/* Featured Badge */}
               {plan.featured && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="rounded-full gradient-primary px-4 py-1.5 text-sm font-medium text-white">
+                  <span className="rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-accent-foreground">
                     Recommended
                   </span>
                 </div>
@@ -102,8 +102,8 @@ export default function Pricing() {
               <ul className="mt-8 space-y-4">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-3">
-                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                      <Check className="h-3 w-3 text-primary" />
+                    <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-accent/10">
+                      <Check className="h-3 w-3 text-accent" />
                     </div>
                     <span className="text-sm text-muted-foreground">
                       {feature}
@@ -117,8 +117,8 @@ export default function Pricing() {
                 className={cn(
                   "mt-8 w-full",
                   plan.featured
-                    ? "gradient-primary text-white hover:glow-primary"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    ? "bg-accent text-accent-foreground hover:bg-accent/90 hover:glow-primary"
+                    : "bg-primary text-primary-foreground hover:bg-primary/90"
                 )}
                 size="lg"
               >

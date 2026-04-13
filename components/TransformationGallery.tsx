@@ -53,7 +53,7 @@ export default function TransformationGallery() {
           {transformations.map((item) => (
             <div
               key={item.id}
-              className="group relative overflow-hidden rounded-2xl bg-card border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-lg"
+              className="group relative overflow-hidden rounded-2xl bg-card border border-border transition-all duration-300 hover:border-accent/30 hover:shadow-lg"
             >
               {/* Before/After Images */}
               <div className="relative aspect-square overflow-hidden">
@@ -76,7 +76,7 @@ export default function TransformationGallery() {
                 <div className="absolute left-3 top-3 rounded-full bg-background/80 px-3 py-1 text-xs font-medium text-foreground backdrop-blur-sm transition-opacity duration-300 group-hover:opacity-0">
                   Before
                 </div>
-                <div className="absolute left-3 top-3 rounded-full bg-primary px-3 py-1 text-xs font-medium text-primary-foreground opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                <div className="absolute left-3 top-3 rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                   After
                 </div>
               </div>
@@ -94,7 +94,7 @@ export default function TransformationGallery() {
         <div className="mt-12 text-center">
           <a
             href="#"
-            className="inline-flex items-center gap-2 text-sm font-medium text-primary hover:text-primary/80 transition-colors"
+            className="inline-flex items-center gap-2 text-sm font-medium text-accent hover:text-accent/80 transition-colors"
           >
             View more transformations
             <ArrowRight className="h-4 w-4" />
