@@ -41,10 +41,10 @@ export default function BeforeAfterSlider() {
               </div>
             </div>
             <div className="absolute bottom-4 left-4 rounded-md bg-background/85 px-2 py-1 text-xs font-semibold text-foreground backdrop-blur-sm">
-              Before
+              After
             </div>
             <div className="absolute bottom-4 right-4 rounded-md bg-accent px-2 py-1 text-xs font-semibold text-accent-foreground">
-              After
+              Before
             </div>
           </div>
           <div className="mt-4 flex justify-center gap-2">
