@@ -36,7 +36,7 @@ const transformations = [
 
 export default function TransformationGallery() {
   return (
-    <section className="bg-secondary/30 py-24">
+    <section className="bg-secondary/30 py-24" id="transformation-gallery">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center">

@@ -1,27 +1,96 @@
+
+/**
+ * Hero Component
+ *
+ * This is the main hero section for the landing page.
+ *
+ * Features:
+ * - Headline, subheadline, and trust indicators
+ * - Animated CTA button (pulse on click)
+ * - Right column with drag-and-drop image upload and preview
+ * - Upload area supports drag-and-drop and manual file selection
+ * - Responsive layout for desktop and mobile
+ * - Floating before/after headshot preview cards
+ *
+ * Usage:
+ * Place this component at the top of your main page to provide users with a welcoming introduction and an easy way to upload their photos for AI headshot transformation.
+ */
+
 "use client";
 
 import { Button } from "@/components/ui/button";
 import { Upload, Shield, ArrowRight } from "lucide-react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
+
+
 
 export default function Hero() {
-  const [isDragging, setIsDragging] = useState(false);
+  const [isDragging, setIsDragging] = useState(false); // Track drag state for styling
+  const [headshotBtn, setHeadshotBtn] = useState(false); // For button animation
+  const [isAnimating, setIsAnimating] = useState(false); // To trigger animation class
+  const [images, setImages] = useState<string[]>([]); // Store uploaded image previews
+  const fileInputRef = useRef<HTMLInputElement | null>(null); // Ref for hidden file input
+  const handleCancelUpload = () => { // Reset state to cancel upload
+    setImages([]);
+  }
+  const handleGenerateAIHeadshot = () => { // Placeholder for AI headshot generation logic
+    alert("AI headshot generation will be implemented in the backend phase.");
+  }
 
-  const handleDragOver = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(true);
+  //feat: v2.1.1 - Drag-and-drop handlers
+  const handleDragOver = useCallback((e: React.DragEvent) => { // When a file is dragged over the upload area
+    e.preventDefault(); // Prevent default to allow drop
+    setIsDragging(true); // Set dragging state to true to apply drag styling
   }, []);
 
-  const handleDragLeave = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
+  const handleDragLeave = useCallback((e: React.DragEvent) => { // When a file is dragged away from the upload area
+    e.preventDefault(); // Prevent default behavior
+    setIsDragging(false); //set dragging state to false to remove drag styling
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragging(false);
+
+  const handleDrop = useCallback((e: React.DragEvent) => { // When a file is dropped onto the upload area
+    e.preventDefault(); // Prevent default behavior (e.g., opening the file in the browser)
+    setIsDragging(false); // Reset dragging state to false to remove drag styling
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')); // Filter out non-image files
+    if (files.length) { //valid images, process them.
+      handleFiles(files);
+    }
   }, []);
+
+  const handleFiles = (files: File[]) => { // Convert files to data URLs for preview
+    const readers = files.map(file => {
+      return new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    });
+    Promise.all(readers).then(imgs => { // Once all files are read, update the images state with the new previews
+      setImages(prev => [...prev, ...imgs]);
+    });
+  };
+
+  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => { // When a file is selected via the file input
+    if (e.target.files) {
+      handleFiles(Array.from(e.target.files));
+      e.target.value = '';
+    }
+  };
+
+  const handleUploadClick = () => { // Select photo btn clicked, trigger the hidden file input click to open the file dialog.
+    fileInputRef.current?.click();
+  };
+
+  // Animation handler for button
+  const handleHeadshotClick = () => {
+    setHeadshotBtn(!headshotBtn);
+    setIsAnimating(true);
+    setTimeout(() => setIsAnimating(false), 400); // Animation duration (ms)
+  };
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-transparent pt-28 pb-20 lg:pt-32">
@@ -43,7 +112,7 @@ export default function Hero() {
 
             {/* Subheadline */}
             <p className="mt-6 text-lg text-muted-foreground text-pretty max-w-lg mx-auto lg:mx-0 leading-relaxed">
-              Transform any photo into studio-quality professional portraits with AI. 
+              Transform any photo into studio-quality professional portraits with AI.
               No photoshoot required.
             </p>
 
@@ -51,18 +120,21 @@ export default function Hero() {
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row lg:justify-start">
               <Button
                 size="lg"
-                className="bg-accent text-accent-foreground px-8 h-12 text-base font-medium transition-all hover:bg-accent/90 hover:glow-primary"
+                className={`bg-accent text-accent-foreground px-8 h-12 text-base font-medium transition-all hover:bg-accent/90 hover:glow-primary`}
+                onClick={handleHeadshotClick}
               >
                 Create Your Headshot
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
-              <Button
-                variant="outline"
-                size="lg"
-                className="h-12 border-border text-foreground hover:bg-muted"
-              >
-                View Examples
-              </Button>
+              <Link href="#transformation-gallery" passHref>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="h-12 border-border text-foreground hover:bg-muted"
+                >
+                  See Transformations
+                </Button>
+              </Link>
             </div>
 
             {/* Trust Indicators */}
@@ -100,55 +172,99 @@ export default function Hero() {
           </div>
 
           {/* Right Column - Upload Interface & Preview */}
-          <div className="relative">
-            {/* Main Upload Card */}
+          <div className={`relative ${isAnimating ? "animate-pulse-once" : ""}`} >
+            {/* Main Upload Card, feat: v2.1.1- Added Pulse.*/}
             <div
-              className={`relative rounded-2xl border bg-card p-8 shadow-lg transition-all duration-300 ${
-                isDragging
-                  ? "border-primary glow-primary"
-                  : "border-border hover:border-primary/30"
-              }`}
+              className={`relative rounded-2xl border bg-card p-8 shadow-lg transition-all duration-300 group ${isDragging ? "border-primary ring-4 ring-primary/20 glow-primary" : "border-border hover:border-primary/30"}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
+              onDragEnter={handleDragOver}
+              onDragEnd={handleDragLeave}
+              tabIndex={0}
+              aria-label="Upload your photo by clicking or dragging here"
+              style={{ cursor: 'pointer' }}
             >
               {/* Preview Grid */}
-              <div className="mb-8 grid grid-cols-3 gap-3">
-                {[1, 2, 3].map((i) => (
-                  <div
-                    key={i}
-                    className="aspect-square overflow-hidden rounded-xl bg-muted"
-                  >
-                    <Image
-                      src={`/placeholder.svg?height=200&width=200&text=Style ${i}`}
-                      alt={`Headshot style ${i}`}
-                      width={200}
-                      height={200}
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                ))}
+              <div className="mb-8">
+                <div
+                  className={
+                    images.length > 3
+                      ? "flex gap-3 overflow-x-auto scrollbar-thin scrollbar-thumb-accent/40 scrollbar-track-transparent"
+                      : "grid grid-cols-3 gap-3"
+                  }
+                  style={{ WebkitOverflowScrolling: 'touch' }}
+                >
+                  {images.length > 0
+                    ? images.map((img, idx) => (
+                        <div
+                          key={idx}
+                          className="aspect-square overflow-hidden rounded-xl bg-muted shrink-0"
+                          style={images.length > 3 ? { minWidth: 90, width: 90, maxWidth: 120 } : {}}
+                        >
+                          <Image src={img} alt={`Uploaded ${idx + 1}`} width={200} height={200} className="h-full w-full object-cover" />
+                        </div>
+                      ))
+                    : [1, 2, 3].map((i) => (
+                        <div key={i} className="aspect-square overflow-hidden rounded-xl bg-muted">
+                          <Image src={`/dummy-image-square.jpg`} alt={`Headshot style ${i}`} width={200} height={200} className="h-full w-full object-cover" />
+                        </div>
+                      ))}
+                </div>
               </div>
 
               {/* Upload Area */}
-              <div className="text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent/10">
-                  <Upload className="h-6 w-6 text-accent" />
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-foreground">
-                  Upload Your Photo
-                </h3>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Drag and drop or click to upload
-                </p>
+              <div className="text-center select-none" >
+                <div className="" onClick={handleUploadClick}>
+                  <div className={`mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-accent/10 transition-all ${isDragging ? "scale-110 bg-primary/20" : ""}`} >
+                    <Upload className={`h-6 w-6 transition-colors ${isDragging ? "text-primary" : "text-accent"}`} />
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold text-foreground">
+                    Upload Your Photo
+                  </h3>
+                  <p className={`mt-1 text-sm transition-colors ${isDragging ? "text-primary" : "text-muted-foreground"}`}>
+                    {isDragging ? "Drop image(s) here" : "Drag and drop or click to upload"}
+                  </p>
 
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleFileInputChange}
+                  />
+
+                </div>
+                
+                {/* feat: v2.1.1 - Conditional, if one or more images are uploaded then select photo is replaced by two buttons "Cancel" and "Generate AI Headshot" */}
+                {images.length > 0 ? (
+                  <div className="mt-6 flex items-center justify-between gap-4">
+                      <Button
+                        size="lg"
+                        className="flex-1 bg-destructive text-destructive-foreground font-medium hover:bg-destructive/90"
+                        onClick={handleCancelUpload}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                      size="lg"
+                      className="flex-1 bg-primary text-primary-foreground font-medium hover:bg-primary/90"
+                      onClick={handleGenerateAIHeadshot}
+                      >
+                      Generate AI Headshot
+                     </Button>
+                  </div>
+                ):(
                 <Button
                   size="lg"
                   className="mt-6 w-full bg-accent text-accent-foreground font-medium hover:bg-accent/90"
+                  onClick={handleUploadClick}
                 >
                   <Upload className="mr-2 h-4 w-4" />
                   Select Photo
                 </Button>
+                )}
 
                 <div className="mt-4 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                   <Shield className="h-3.5 w-3.5" />
@@ -158,7 +274,7 @@ export default function Hero() {
             </div>
 
             {/* Floating Elements - Subtle */}
-            <div className="absolute -left-4 top-12 hidden lg:block">
+            <div className="absolute -left-8 -top-10 hidden lg:block">
               <div className="rounded-xl border border-border bg-card px-4 py-3 shadow-lg">
                 <div className="flex items-center gap-3">
                   <div className="relative h-10 w-10 overflow-hidden rounded-full">
@@ -177,7 +293,8 @@ export default function Hero() {
               </div>
             </div>
 
-            <div className="absolute -right-4 bottom-20 hidden lg:block">
+            {/* feat: v2.2.0 - Bottom style  */}
+            <div className="absolute -right-8 -bottom-10 hidden lg:block">
               <div className="rounded-xl border border-border bg-card px-4 py-3 shadow-lg">
                 <div className="flex items-center gap-3">
                   <div className="relative h-10 w-10 overflow-hidden rounded-full">
@@ -201,3 +318,4 @@ export default function Hero() {
     </section>
   );
 }
+

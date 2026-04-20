@@ -1,3 +1,22 @@
+/* Pulse animation for button click */
+.animate-pulse-once {
+  animation: pulse-once 0.4s cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+@keyframes pulse-once {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 153, 255, 0.7);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 8px rgba(0, 153, 255, 0.15);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 153, 255, 0);
+  }
+}
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
