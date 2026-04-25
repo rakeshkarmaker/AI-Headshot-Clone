@@ -36,3 +36,14 @@ python -c "import tensorflow as tf; print('TF Version:', tf.__version__)"
 Remaining Dependencies:
 
 pip install tf-keras
+
+
+
+python manage.py createsuperuser
+
+user
+rakesh.kodevio@gmail.com
+123456
+
+
+pip install djangorestframework
