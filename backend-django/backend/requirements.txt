@@ -1,0 +1,8 @@
+Django
+djangorestframework
+Pillow
+tensorflow
+keras
+opencv-python
+opencv-contrib-python
+deepface

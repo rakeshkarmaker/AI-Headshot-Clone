@@ -5,7 +5,7 @@ from .models import Job
 from images.models import Image
 
 from services.validator_instance import validator
-
+from services.analysis.face_analyzer import analyze_face
 
 # New view to delete all jobs
 from rest_framework import status
@@ -47,10 +47,11 @@ class UploadImageView(APIView):
             if not valid:
                 # 3. DELETE invalid image properly
                 image_obj.delete()
-
-                return Response({
-                    "error": msg
-                }, status=400)
+                return Response({"error": msg}, status=400)
+            
+            #  4. If valid, analyze and save results
+            analysis_data = analyze_face(image_obj.file.path)
+            print("ANALYSIS:", analysis_data)  # debug for now
 
         return Response({"status": "uploaded"})
     
